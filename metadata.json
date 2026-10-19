@@ -1,0 +1,6 @@
+{
+  "name": "YAKUB AURA AI",
+  "description": "Premium Native Android Personal AI Assistant Application with Anime Companion",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
