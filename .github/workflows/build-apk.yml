@@ -85,6 +85,30 @@ jobs:
             fi
             echo "Temporary debug keystore created successfully."
           fi
+          mkdir -p ~/.android
+          cp "$KEYSTORE_FILE" ~/.android/debug.keystore || true
+
+      - name: Prepare environment configuration
+        run: |
+          if [ ! -f .env ]; then
+            if [ -f .env.example ]; then
+              cp .env.example .env
+            else
+              echo "GEMINI_API_KEY=MY_GEMINI_API_KEY" > .env
+            fi
+          fi
+          echo "Environment configuration ready."
+
+      - name: Accept Android SDK licenses
+        run: |
+          echo "Accepting Android SDK licenses..."
+          if [ -n "$ANDROID_HOME" ] && [ -x "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" ]; then
+            yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses || true
+          elif [ -n "$ANDROID_SDK_ROOT" ] && [ -x "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" ]; then
+            yes | "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" --licenses || true
+          elif which sdkmanager > /dev/null 2>&1; then
+            yes | sdkmanager --licenses || true
+          fi
 
       - name: Build the debug APK
         run: |
